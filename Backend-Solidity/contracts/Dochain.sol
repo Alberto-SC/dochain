@@ -9,6 +9,7 @@ import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Supply.sol";
 import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155URIStorage.sol";
 
 error Dochain__VerifyFailed();
+error Dochain__YouNotTheOwner();
 
 /** @title Dochain Contract
  * @author José Piña
@@ -27,10 +28,22 @@ contract Dochain is
     /* Type declarations */
     using ECDSA for bytes32;
 
+    event MintSuccess(
+        uint256 indexed idToken,
+        bytes indexed data,
+        address indexed owner
+    );
+    event SetURISuccess(uint256 indexed idToken, string indexed newURI);
+
     constructor(string memory tokenURI) ERC1155(tokenURI) {}
 
     function setURI(uint256 tokenId, string memory newuri) public {
-        _setURI(tokenId, newuri);
+        if (balanceOf(msg.sender, tokenId) > 0) {
+            _setURI(tokenId, newuri);
+            emit SetURISuccess(tokenId, newuri);
+        } else {
+            revert Dochain__YouNotTheOwner();
+        }
     }
 
     function uri(uint256 tokenId)
@@ -49,9 +62,10 @@ contract Dochain is
         returns (bool)
     {
         if (_verify(message, sign, _msgSender())) {
+            return true;
+        } else {
             revert Dochain__VerifyFailed();
         }
-        return true;
     }
 
     function mint(
@@ -61,6 +75,7 @@ contract Dochain is
         bytes memory data
     ) public {
         _mint(account, id, amount, data);
+        emit MintSuccess(id, data, account);
     }
 
     function mintBatch(
