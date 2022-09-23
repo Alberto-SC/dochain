@@ -28,10 +28,19 @@ contract Dochain is
     /* Type declarations */
     using ECDSA for bytes32;
 
+    enum typeToken {
+        empty,
+        directory,
+        file
+    }
+
+    mapping(uint256 => mapping(typeToken => typeToken)) public typeOfToken;
+
     event MintSuccess(
         uint256 indexed idToken,
-        bytes indexed data,
-        address indexed owner
+        bytes data,
+        address indexed owner,
+        uint8 indexed tokenType
     );
     event SetURISuccess(uint256 indexed idToken, string indexed newURI);
 
@@ -72,10 +81,12 @@ contract Dochain is
         address account,
         uint256 id,
         uint256 amount,
-        bytes memory data
+        bytes memory data,
+        uint8 tokenType
     ) public {
         _mint(account, id, amount, data);
-        emit MintSuccess(id, data, account);
+        typeOfToken[id][typeToken(tokenType)] = typeToken(tokenType - 1);
+        emit MintSuccess(id, data, account, tokenType);
     }
 
     function mintBatch(

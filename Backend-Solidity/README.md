@@ -32,7 +32,6 @@
       </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#licencia">License</a></li>
     <li><a href="#autores">Contact</a></li>
   </ol>
@@ -79,7 +78,7 @@ For encryption, we will use a metamask compatible cipher in case we cannot work 
 
 1. Clona el repositorio
    ```sh
-   git clone https://github.com/Dochain1/Back-end-Solidity
+   git clone https://github.com/Alberto-SC/dochain
    ```
 2. Instala las dependencias
    ```sh
