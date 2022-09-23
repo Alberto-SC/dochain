@@ -7,6 +7,7 @@ import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Pausable.sol";
 import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Burnable.sol";
 import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Supply.sol";
 import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155URIStorage.sol";
+import "@openzeppelin/contracts/utils/Counters.sol";
 
 error Dochain__VerifyFailed();
 error Dochain__YouNotTheOwner();
@@ -27,11 +28,23 @@ contract Dochain is
 {
     /* Type declarations */
     using ECDSA for bytes32;
+    using Counters for Counters.Counter;
+
+    Counters.Counter public tokenIdCounter;
+
+    enum typeToken {
+        directory,
+        file
+    }
+
+    mapping(uint256 => typeToken) public typeOfToken;
+    mapping(uint256 => uint256) public relationToken;
 
     event MintSuccess(
         uint256 indexed idToken,
-        bytes indexed data,
-        address indexed owner
+        bytes data,
+        address indexed owner,
+        uint8 indexed tokenType
     );
     event SetURISuccess(uint256 indexed idToken, string indexed newURI);
 
@@ -70,12 +83,17 @@ contract Dochain is
 
     function mint(
         address account,
-        uint256 id,
         uint256 amount,
-        bytes memory data
+        bytes memory data,
+        uint8 tokenType,
+        uint256 _relationToken
     ) public {
-        _mint(account, id, amount, data);
-        emit MintSuccess(id, data, account);
+        uint256 tokenId = tokenIdCounter.current();
+        tokenIdCounter.increment();
+        relationToken[tokenId] = _relationToken;
+        _mint(account, tokenId, amount, data);
+        typeOfToken[tokenId] = typeToken(tokenType);
+        emit MintSuccess(tokenId, data, account, tokenType);
     }
 
     function mintBatch(
