@@ -13,7 +13,8 @@ const { GOERLI_RPC_URL: GOERLI_RPC_URL,
         PRIVATE_KEY: PRIVATE_KEY,
         ETHERSCAN_API_KEY:ETHERSCAN_API_KEY,
         COINMARKETCAP_API_KEY:COINMARKETCAP_API_KEY,
-        REPORT_GAS: REPORT_GAS } = process.env
+        REPORT_GAS: REPORT_GAS,
+        POLYGON_RPC_URL: POLYGON_RPC_URL } = process.env
 
 const config: HardhatUserConfig = {
   defaultNetwork: "hardhat",
@@ -29,6 +30,11 @@ const config: HardhatUserConfig = {
       accounts: PRIVATE_KEY !== undefined ? [PRIVATE_KEY] : [],
       chainId: 5,
     },
+    polygon: {
+      url: POLYGON_RPC_URL,
+      accounts: PRIVATE_KEY !== undefined ? [PRIVATE_KEY] : [],
+      chainId: 137
+    }
   },
   solidity: "0.8.7",
   etherscan: {

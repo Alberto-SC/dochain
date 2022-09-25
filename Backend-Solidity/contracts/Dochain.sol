@@ -32,19 +32,19 @@ contract Dochain is
 
     Counters.Counter public tokenIdCounter;
 
-    enum typeToken {
+    enum TypeToken {
         directory,
         file
     }
 
-    mapping(uint256 => typeToken) public typeOfToken;
+    mapping(uint256 => TypeToken) public typeOfToken;
     mapping(uint256 => uint256) public relationToken;
 
     event MintSuccess(
         uint256 indexed idToken,
         bytes data,
         address indexed owner,
-        uint8 indexed tokenType
+        TypeToken indexed tokenType
     );
     event SetURISuccess(uint256 indexed idToken, string indexed newURI);
 
@@ -85,14 +85,14 @@ contract Dochain is
         address account,
         uint256 amount,
         bytes memory data,
-        uint8 tokenType,
+        TypeToken tokenType,
         uint256 _relationToken
     ) public {
         uint256 tokenId = tokenIdCounter.current();
         tokenIdCounter.increment();
         relationToken[tokenId] = _relationToken;
         _mint(account, tokenId, amount, data);
-        typeOfToken[tokenId] = typeToken(tokenType);
+        typeOfToken[tokenId] = tokenType;
         emit MintSuccess(tokenId, data, account, tokenType);
     }
 
