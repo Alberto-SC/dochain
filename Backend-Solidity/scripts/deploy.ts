@@ -12,7 +12,7 @@ async function deployContract() {
   const Dochain = await DochainFactory.deploy(URI)
   await Dochain.deployed()
 
-  if (network.config.chainId === 5 && process.env.ETHERSCAN_API_KEY) {
+  if (network.config.chainId === 137 && process.env.ETHERSCAN_API_KEY) {
     await Dochain.deployTransaction.wait(3)
     await verify(Dochain.address, args)
   }
