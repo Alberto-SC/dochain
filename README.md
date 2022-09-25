@@ -11,7 +11,7 @@
         An application to save your documents and share them safely
     <br/>
     <a href="https://github.com/Alberto-SC/dochain"><strong> Explore the docs » </strong></a>
-    <a href="https://goerli.etherscan.io/address/0x85506e0eA2864e1BEE87C6eDCa92745a204394e0#code"><strong> Last contract deployed » </strong></a>
+    <a href="https://polygonscan.com/address/0x2189578f8C7fc3f6f3f4A72718b31937612f4067#code"><strong> Contract deployed in Polygon Mainnet» </strong></a>
     </p>
 </div> 
 
